@@ -98,7 +98,7 @@ export const projects = [
   {
     id: 4,
     title: "Virtual Heaven - AI + AR Vtuber app",
-    des: "A cross platform (IOS & Android) AR app that allows users to create and control their own Vtuber via facial tracking using AI and AR technology.",
+    des: "A cross-platform AR app that allows users to create and control their own Vtuber via facial tracking using AI and AR technology.",
     img: "/V-Heaven.png",
     stacks: ["Unity", "AR Foundation 5.1", "ARKit", "ARCore", "Firebase", "MediaPipe"],
     link: "https://play.google.com/store/apps/details?id=com.Gachy.VirtualHeavenApp&hl=en",

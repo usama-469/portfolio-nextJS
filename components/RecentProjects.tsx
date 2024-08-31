@@ -13,11 +13,11 @@ const RecentProjects = () => {
         A small selection of {' '}
         <span className="text-purple">recent projects</span>
       </h1>
-      <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 items-center justify-center p-4 gap-24 mt-10">
+      <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 items-start justify-center p-4 gap-12 mt-10">
         {projects.map(({id, title, des, img, stacks, link}) => (
-          <div key={id} className="lg:min-h-[22.5rem] h-auto flex items-center justify-center sm:w-full w-full">
-            <CardContainer className="inter-var">
-              <CardBody className="relative group/card dark:hover:shadow-2xl dark:hover:shadow-emerald-500/[0.1] dark:border-white/[0.2] border-black/[0.1] w-auto sm:w-[30rem] h-auto rounded-xl p-6 border">
+          <div key={id} className="flex items-stretch justify-center">
+            <CardContainer className="w-full lg:min-h-[24rem] h-auto flex flex-col justify-between">
+              <CardBody className="relative group/card dark:hover:shadow-2xl dark:hover:shadow-emerald-500/[0.1] dark:border-white/[0.2] border-black/[0.1] w-full h-full rounded-xl p-6 border">
                 <CardItem
                   translateZ="50"
                   className="text-xl font-bold text-neutral-600 dark:text-white">
@@ -30,8 +30,8 @@ const RecentProjects = () => {
                 >
                   {des}
                 </CardItem>
-                <CardItem translateZ="50" className="w-full mt-4">
-                  <div className="relative flex items-center justify-center sm:w-96 w-full overflow-hidden h-[20vh] lg:h-[30vh] mb-5"> 
+                <CardItem translateZ="50" className="w-full mt-4 flex-grow">
+                  <div className="relative flex items-center justify-center overflow-hidden h-[20vh] lg:h-[30vh] mb-5"> 
                     <div className="relative w-full h-full overflow-hidden lg:rounded-3xl">
                     </div>
                     <Image
@@ -41,12 +41,11 @@ const RecentProjects = () => {
                           className="h-60 w-full object-cover rounded-xl group-hover/card:shadow-xl"
                           alt={title}
                         />
-                      {/* <img src={img} alt={title} className="z-10 absolute bottom-0" /> */}
                     </div>
                 </CardItem>
-                <CardItem>
+                <CardItem className="flex-grow">
                   <p>Tech Stack:</p>
-                  <div className="flex flex-wrap items-center mt-5 mb-2 gap-2">
+                  <div className="flex flex-wrap items-center mt-5 gap-2 mb-5">
                     {stacks.map((item, i) => (
                       <span
                         key={i}
@@ -62,7 +61,7 @@ const RecentProjects = () => {
                   as={Link}
                   href={link}
                   target="__blank"
-                  className="px-4 py-2 rounded-xl text-xs font-normal dark:text-white absolute bottom-4 right-4"
+                  className="px-4 py-2 rounded-xl text-xs font-normal dark:text-white mt-4 ml-auto flex justify-end"
                 >
                   Try now →
                 </CardItem>
@@ -71,7 +70,7 @@ const RecentProjects = () => {
           </div> 
         ))}
       </div>
-      <div className="flex justify-center items-center">
+      <div className="flex justify-center items-center mt-10">
         <a href="https://github.com/usama-469?tab=repositories" rel="noopener noreferrer" target="_blank">
           <MagicButton 
             title="View more projects"
@@ -83,5 +82,6 @@ const RecentProjects = () => {
     </div>
   );
 };
+
 
 export default RecentProjects;
