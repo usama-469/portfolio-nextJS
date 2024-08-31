@@ -13,9 +13,9 @@ const RecentProjects = () => {
         A small selection of {' '}
         <span className="text-purple">recent projects</span>
       </h1>
-      <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 items-center justify-center p-4 gap-24 mt-10">
+      <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 items-center justify-center p-4 gap-24 mt-10">
         {projects.map(({id, title, des, img, stacks, link}) => (
-          <div key={id} className="lg:min-h-[22.5rem] h-auto flex items-center justify-center sm:w-96 w-[90vh]">
+          <div key={id} className="lg:min-h-[22.5rem] h-auto flex items-center justify-center sm:w-full w-full">
             <CardContainer className="inter-var">
               <CardBody className="relative group/card dark:hover:shadow-2xl dark:hover:shadow-emerald-500/[0.1] dark:border-white/[0.2] border-black/[0.1] w-auto sm:w-[30rem] h-auto rounded-xl p-6 border">
                 <CardItem
