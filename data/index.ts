@@ -76,7 +76,7 @@ export const projects = [
     des: "A multi player XR app for engineers and product designers to visaualize, inspect and demonstrate their products.",
     img: "/bio-IVI.png",
     stacks: ["Unity", "Meta SDK", "OVR toolkit", "C#", "Firebase","PUN2"],
-    link: "https://github.com",
+    link: "https://github.com/usama-469/project-bio-IVI/tree/main",
  
   },
   {
