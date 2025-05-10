@@ -77,6 +77,12 @@ export const projects = [
     img: "/bio-IVI.png",
     stacks: ["Unity", "Meta SDK", "OVR toolkit", "C#", "Firebase","PUN2"],
     link: "https://github.com/usama-469/project-bio-IVI/tree/main",
+    videoUrl: "https://www.youtube.com/watch?v=KLfyXzboDM8", // Path to your video in the public folder
+    gallery: [
+      "/bio-IVI.png",
+      "/VR-room.png",
+      "/vr-crowd.png"
+  ]
  
   },
   {

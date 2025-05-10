@@ -14,6 +14,8 @@ type Project = {
   img: string;
   stacks: string[];
   link: string;
+  gallery?: string[]; // array of image URLs
+  videoUrl?: string; // YouTube video URL
 };
 
 const PROJECTS_PER_PAGE = 6;
@@ -152,48 +154,76 @@ const RecentProjects = () => {
 
       {/* Modal Popup */}
       {isModalOpen && selectedProject && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-          <div className="bg-white dark:bg-[#18181b] rounded-2xl shadow-2xl max-w-lg w-full p-8 relative animate-fadeIn">
-            <button
-              onClick={closeModal}
-              className="absolute top-4 right-4 text-2xl text-gray-400 hover:text-purple-500 transition-colors"
-              aria-label="Close"
+        <>
+          {/* Prevent background scroll and hide nav bar by setting body overflow */}
+          <style>{`body { overflow: hidden !important; }`}</style>
+          <div
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm"
+            onClick={closeModal}
+          >
+            <div
+              className="bg-white dark:bg-[#18181b] rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-8 relative animate-fadeIn"
+              onClick={e => e.stopPropagation()} // Prevent modal content click from closing
             >
-              ×
-            </button>
-            <div className="flex flex-col items-center">
-              <Image
-                src={selectedProject.img}
-                height={300}
-                width={400}
-                className="object-cover rounded-xl mb-4 w-full h-48"
-                alt={selectedProject.title}
-              />
-              <h2 className="text-2xl font-bold mb-2 text-purple-600 dark:text-purple-400">{selectedProject.title}</h2>
-              <p className="text-neutral-700 dark:text-neutral-200 mb-4 text-center">{selectedProject.des}</p>
-              <div className="flex flex-wrap gap-2 mb-4 justify-center">
-                {selectedProject.stacks.map((item: string, i: number) => (
-                  <span
-                    key={i}
-                    className="py-1 px-3 text-xs rounded-lg bg-[#10132E] text-white"
-                  >
-                    {item}
-                  </span>
-                ))}
-              </div>
-              <a
-                href={selectedProject.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block mt-2 px-4 py-2 bg-gradient-to-br from-purple-500 to-indigo-500 text-white rounded-lg shadow hover:scale-105 transition-transform"
+              <button
+                onClick={closeModal}
+                className="absolute top-4 right-4 text-2xl text-gray-400 hover:text-purple-500 transition-colors"
+                aria-label="Close"
               >
-                Visit Project
-              </a>
+                ×
+              </button>
+              <div className="flex flex-col items-center">
+                {/* YouTube Video section if available */}
+                {selectedProject.videoUrl && (
+                  <div className="w-full mb-4 aspect-video rounded-xl overflow-hidden bg-black">
+                    <iframe
+                      src={`https://www.youtube.com/embed/${selectedProject.videoUrl.split('v=')[1]}`}
+                      title={selectedProject.title}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                      className="w-full h-full"
+                    ></iframe>
+                  </div>
+                )}
+                {/* Gallery section if available */}
+                {selectedProject.gallery && selectedProject.gallery.length > 0 && (
+                  <div className="flex gap-2 mb-4 w-full justify-center">
+                    {selectedProject.gallery.slice(0, 3).map((img, idx) => (
+                      <Image
+                        key={idx}
+                        src={img}
+                        height={120}
+                        width={180}
+                        className="object-cover rounded-lg border w-36 h-24"
+                        alt={selectedProject.title + ' gallery ' + (idx + 1)}
+                      />
+                    ))}
+                  </div>
+                )}
+                <h2 className="text-2xl font-bold mb-2 text-purple-600 dark:text-purple-400">{selectedProject.title}</h2>
+                <p className="text-neutral-700 dark:text-neutral-200 mb-4 text-center">{selectedProject.des}</p>
+                <div className="flex flex-wrap gap-2 mb-4 justify-center">
+                  {selectedProject.stacks.map((item: string, i: number) => (
+                    <span
+                      key={i}
+                      className="py-1 px-3 text-xs rounded-lg bg-[#10132E] text-white"
+                    >
+                      {item}
+                    </span>
+                  ))}
+                </div>
+                <a
+                  href={selectedProject.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block mt-2 px-4 py-2 bg-gradient-to-br from-purple-500 to-indigo-500 text-white rounded-lg shadow hover:scale-105 transition-transform"
+                >
+                  Visit Project
+                </a>
+              </div>
             </div>
           </div>
-          {/* Overlay click closes modal */}
-          <div className="fixed inset-0 z-40" onClick={closeModal}></div>
-        </div>
+        </>
       )}
 
       <div className="flex justify-center items-center mt-10">
