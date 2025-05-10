@@ -119,6 +119,39 @@ export const projects = [
     stacks: ["Unity", "AR Foundation 5.1", "ARKit", "XCode", "Figma"],
     link: "https://github.com/usama-469/Ship-AR-Museum",
   },
+    {
+    id: 7,
+    title: "Spark-AR - AR filters for instagram",
+    des: "AR filters for Instagram and Facebook, including face filters, world effects, and more. For marketing and entertainment purposes.",
+    img: "/spark-AR-filters.png",
+    stacks: ["Meta Spark AR Studio", "JavaScript", "HTML", "Visual programming"],
+    link: "https://github.com",
+  },
+  {
+    id: 8,
+    title: "AR Ship - AR app for ship inspection",
+    des: "A highly intuitive AR based app. The app uses plane tracking and complex interactions to place the ship the real world.",
+    img: "/shipAR.png",
+    stacks: ["Unity", "AR Foundation 5.1", "ARKit", "XCode", "Figma"],
+    link: "https://github.com/usama-469/Ship-AR-Museum",
+  },
+    {
+    id: 9,
+    title: "Spark-AR - AR filters for instagram",
+    des: "AR filters for Instagram and Facebook, including face filters, world effects, and more. For marketing and entertainment purposes.",
+    img: "/spark-AR-filters.png",
+    stacks: ["Meta Spark AR Studio", "JavaScript", "HTML", "Visual programming"],
+    link: "https://github.com",
+  },
+  {
+    id: 10,
+    title: "AR Ship - AR app for ship inspection",
+    des: "A highly intuitive AR based app. The app uses plane tracking and complex interactions to place the ship the real world.",
+    img: "/shipAR.png",
+    stacks: ["Unity", "AR Foundation 5.1", "ARKit", "XCode", "Figma"],
+    link: "https://github.com/usama-469/Ship-AR-Museum",
+  },
+  
 ];
 
 export const testimonials = [

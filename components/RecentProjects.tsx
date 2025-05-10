@@ -1,20 +1,74 @@
 "use client";
+import React, { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { FaLocationArrow } from "react-icons/fa6";
+import { FaLocationArrow, FaChevronLeft, FaChevronRight } from "react-icons/fa6";
 import { projects } from "@/data";
 import { CardBody, CardContainer, CardItem } from "./ui/3d-card";
 import MagicButton from "./ui/MagicButton";
 
+const PROJECTS_PER_PAGE = 6;
+
 const RecentProjects = () => {
+  const [startIndex, setStartIndex] = useState(0);
+  const totalProjects = projects.length;
+
+  const handlePrev = useCallback(() => {
+    setStartIndex((prev) => Math.max(prev - PROJECTS_PER_PAGE, 0));
+  }, []);
+
+  const handleNext = useCallback(() => {
+    setStartIndex((prev) => {
+      const nextIndex = prev + PROJECTS_PER_PAGE;
+      if (nextIndex >= totalProjects) return prev;
+      return nextIndex;
+    });
+  }, [totalProjects]);
+
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        handlePrev();
+      }
+      if (e.key === "ArrowRight") {
+        e.preventDefault();
+        handleNext();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [handlePrev, handleNext]);
+
+  const visibleProjects = projects.slice(startIndex, startIndex + PROJECTS_PER_PAGE);
+
   return (
     <div className="py-20">
       <h1 className="heading">
         A small selection of {' '}
         <span className="text-purple">recent projects</span>
       </h1>
-      <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 items-start justify-center p-4 gap-12 mt-10">
-        {projects.map(({id, title, des, img, stacks, link}) => (
+      <div className="flex justify-between items-center mb-4 px-4">
+        <button
+          onClick={handlePrev}
+          disabled={startIndex === 0}
+          className="p-2 rounded-full bg-gradient-to-br from-purple-500 to-indigo-500 text-white shadow-lg hover:scale-110 transition-transform disabled:opacity-40 disabled:cursor-not-allowed"
+          aria-label="Previous projects"
+        >
+          <FaChevronLeft size={20} />
+        </button>
+        <button
+          onClick={handleNext}
+          disabled={startIndex + PROJECTS_PER_PAGE >= totalProjects}
+          className="p-2 rounded-full bg-gradient-to-br from-purple-500 to-indigo-500 text-white shadow-lg hover:scale-110 transition-transform disabled:opacity-40 disabled:cursor-not-allowed"
+          aria-label="Next projects"
+        >
+          <FaChevronRight size={20} />
+        </button>
+      </div>
+      <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 items-start justify-center p-4 gap-12 mt-10">
+        {visibleProjects.map(({ id, title, des, img, stacks, link }) => (
           <div key={id} className="flex items-stretch justify-center">
             <CardContainer className="w-full lg:min-h-[24rem] h-auto flex flex-col justify-between">
               <CardBody className="relative group/card dark:hover:shadow-2xl dark:hover:shadow-emerald-500/[0.1] dark:border-white/[0.2] border-black/[0.1] w-full h-full rounded-xl p-6 border">
@@ -82,6 +136,5 @@ const RecentProjects = () => {
     </div>
   );
 };
-
 
 export default RecentProjects;
