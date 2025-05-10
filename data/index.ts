@@ -77,46 +77,73 @@ export const projects = [
     img: "/bio-IVI.png",
     stacks: ["Unity", "Meta SDK", "OVR toolkit", "C#", "Firebase","PUN2"],
     link: "https://github.com/usama-469/project-bio-IVI/tree/main",
-    videoUrl: "https://www.youtube.com/watch?v=KLfyXzboDM8", // Path to your video in the public folder
+    videoUrl: "https://www.youtube.com/watch?v=DE7tS33IjnY", // Path to your video in the public folder
     gallery: [
-      "/bio-IVI.png",
-      "/VR-room.png",
-      "/vr-crowd.png"
+      "/ivi1.png",
+      "/ivi2.png",
+      "/ivi3.png"
   ]
  
   },
+
   {
     id: 2,
-    title: "ROOM VR - VR interior decoration App",
-    des: "Simplify the process of interior designing by inspecting multuiple options of store furniture in VR before purchasing.",
-    img: "/VR-room.png",
-    stacks: ["Unity", "C#", "OpenXR", "XR interaction Toolkit", "Blender"],
-    link: "https://www.behance.net/gallery/199557423/VR-Modern-Room-Walkthrough",
-  },
-  {
-    id: 3,
-    title: "Crowd Source - VR behavior analytics",
-    des: "A VR app that helps to collect and understand user behavior in various road crossing scenarios in virtual reality.",
-    img: "/vr-crowd.png",
-    stacks: ["Unity", "Playfab","Meta SDK", "OVR toolkit" ,"File Handling"],
-    link: "https://github.com/usama-469/-VR-crowd-sourcing-app",
-  },
-  {
-    id: 4,
     title: "Food AR Service - Door dash with AR",
     des: "A full stack solution containing 2 mobile apps and one a website for Augmented reality dine in experiences.",
     img: "/foodar.png",
     stacks: ["Unity", "AR Foundation 5.1", "ARKit", "ARCore", "Supabase", "Docker"],
     link: "https://play.google.com/store/apps/details?id=com.BeautifulInteractions.FoodAR&hl=en",
+    videoUrl: "https://www.youtube.com/watch?v=vgkYO7d66zI", // Path to your video in the public folder
+    gallery: [
+      "/foodar1.png",
+      "/foodar2.png",
+      "/foodar3.png"
+  ]
   },
   {
-    id: 5,
-    title: "Spark-AR - AR filters for instagram",
-    des: "AR filters for Instagram and Facebook, including face filters, world effects, and more. For marketing and entertainment purposes.",
-    img: "/spark-AR-filters.png",
-    stacks: ["Meta Spark AR Studio", "JavaScript", "HTML", "Visual programming"],
-    link: "https://github.com",
+    id: 3,
+    title: "ROOM VR - VR interior decoration App",
+    des: "Simplify the process of interior designing by inspecting multuiple options of store furniture in VR before purchasing.",
+    img: "/VR-room.png",
+    stacks: ["Unity", "C#", "OpenXR", "XR interaction Toolkit", "Blender"],
+    link: "https://www.behance.net/gallery/199557423/VR-Modern-Room-Walkthrough",
+    videoUrl: "https://www.youtube.com/watch?v=lydp8Nj00jk", // Path to your video in the public folder
+    gallery: [
+      "/furniture1.png",
+      "/furniture2.png",
+      "/furniture3.png"
+  ]
   },
+  {
+    id: 4,
+    title: "MR - Multi Object detection",
+    des: "A cutting edge Mixed reality solution to detect objects at runtime.",
+    img: "/sentis2.png",
+    stacks: ["Unity", "Sentis", "YOLO", "Meta SDK", "C#"],
+    link: "https://www.youtube.com/watch?v=GVWJD-u-LH4",
+    videoUrl: "https://www.youtube.com/watch?v=GVWJD-u-LH4", // Path to your video in the public folder
+    gallery: [
+      "/sentis1.png",
+      "/sentis2.png",
+      "/sentis3.png"
+  ]
+  },
+
+  {
+    id: 5,
+    title: "Crowd Source - VR behavior analytics",
+    des: "A VR app that helps to collect and understand user behavior in various road crossing scenarios in virtual reality.",
+    img: "/vr-crowd.png",
+    stacks: ["Unity", "Playfab","Meta SDK", "OVR toolkit" ,"File Handling"],
+    link: "https://github.com/usama-469/-VR-crowd-sourcing-app",
+        videoUrl: "https://www.youtube.com/watch?v=F0ZKcuPOwUI", // Path to your video in the public folder
+    gallery: [
+      "/car1.png",
+      "/car2.png",
+      "/car3.png"
+  ]
+  },
+
   {
     id: 6,
     title: "AR Ship - AR app for ship inspection",
@@ -127,19 +154,32 @@ export const projects = [
   },
     {
     id: 7,
-    title: "Spark-AR - AR filters for instagram",
-    des: "AR filters for Instagram and Facebook, including face filters, world effects, and more. For marketing and entertainment purposes.",
-    img: "/spark-AR-filters.png",
-    stacks: ["Meta Spark AR Studio", "JavaScript", "HTML", "Visual programming"],
-    link: "https://github.com",
+    title: "Zombie Shooter - Multiplayer PC game",
+    des: "A multiplayer game where players can shoot zombies and collect coins. The game is designed to be played on PC.",
+    img: "/zombie2.png",
+    stacks: ["Unity", "PUN2", "Fusion", "AI pathfinding", "C#"],
+    link: "https://www.youtube.com/watch?v=beuEXKe___s",
+        videoUrl: "https://www.youtube.com/watch?v=beuEXKe___s", // Path to your video in the public folder
+    gallery: [
+      "/zombie1.png",
+      "/zombie2.png",
+      "/zombie3.png"
+  ]
   },
-  {
+
+    {
     id: 8,
-    title: "AR Ship - AR app for ship inspection",
-    des: "A highly intuitive AR based app. The app uses plane tracking and complex interactions to place the ship the real world.",
-    img: "/shipAR.png",
-    stacks: ["Unity", "AR Foundation 5.1", "ARKit", "XCode", "Figma"],
-    link: "https://github.com/usama-469/Ship-AR-Museum",
+    title: "VR room - VR interior decoration App",
+    des: "Simplify the process of interior designing by inspecting multuiple options of store furniture in VR before purchasing.",
+    img: "/fcontrol2.png",
+    stacks: ["Meta All in one SDK", "Unity", "C#", "OVR toolkit", "Blender"],
+    link: "https://github.com",
+            videoUrl: "https://www.youtube.com/watch?v=hBVFFQF2XeY", // Path to your video in the public folder
+    gallery: [
+      "/fcontrol1.png",
+      "/fcontrol2.png",
+      "/fcontrol3.png"
+    ]
   },
     {
     id: 9,
@@ -148,14 +188,40 @@ export const projects = [
     img: "/spark-AR-filters.png",
     stacks: ["Meta Spark AR Studio", "JavaScript", "HTML", "Visual programming"],
     link: "https://github.com",
+  //       videoUrl: "https://www.youtube.com/watch?v=KLfyXzboDM8", // Path to your video in the public folder
+  //   gallery: [
+  //     "/bio-IVI.png",
+  //     "/VR-room.png",
+  //     "/vr-crowd.png"
+  // ]
   },
   {
     id: 10,
-    title: "AR Ship - AR app for ship inspection",
-    des: "A highly intuitive AR based app. The app uses plane tracking and complex interactions to place the ship the real world.",
-    img: "/shipAR.png",
-    stacks: ["Unity", "AR Foundation 5.1", "ARKit", "XCode", "Figma"],
-    link: "https://github.com/usama-469/Ship-AR-Museum",
+    title: "VR water safety - VR training app",
+    des: "A VR training app for water safety. The app is designed to be used in schools and colleges.",
+    img: "/water-vr1.png",
+    stacks: ["Unity", "Meta All in one SDK", "Inverse Kinematics", "Shader graphs", "Blender"],
+    link: "https://www.youtube.com/watch?v=I3kBoDfGDqs",
+                videoUrl: "https://www.youtube.com/watch?v=I3kBoDfGDqs", // Path to your video in the public folder
+    gallery: [
+      "/water-vr1.png",
+      "/water-vr2.png",
+      "/water-vr3.png"
+    ]
+  },
+    {
+    id: 11,
+    title: "PC third person water safety - PC training app",
+    des: "A PC training game for water safety. The app is designed to be used in schools and colleges.",
+    img: "/water-pc2.png",
+    stacks: ["Unity", "Third person controller", "Inverse Kinematics", "Shader graphs", "Blender"],
+    link: "https://www.youtube.com/watch?v=awm5C-5FNeA",
+                videoUrl: "https://www.youtube.com/watch?v=awm5C-5FNeA", // Path to your video in the public folder
+    gallery: [
+      "/water-pc1.png",
+      "/water-pc2.png",
+      "/water-pc3.png"
+    ]
   },
   
 ];
