@@ -52,7 +52,7 @@ export const BentoGridItem = ({
   titleClassName?: string;
   spareImg?: string;
 }) => {
-  const leftLists = ["AR Foundation", "ARCore & AR Kit", "Vuforia", "8th Wall", "SparkAR", "Meta", "Lightship"];
+  const leftLists = ["AR Foundation", "ARCore & AR Kit", "Vuforia", "8th Wall", "SparkAR", "Meta", "React Native"];
   const rightLists = [ "MetaSDK", "OpenXR", "OVR SDK", "Polyspatial Creator", "Unity", "Unreal Engine"];
 
   const [copied, setCopied] = useState(false);
