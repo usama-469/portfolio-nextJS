@@ -82,8 +82,8 @@ export const projects = [
       "/ivi1.png",
       "/ivi2.png",
       "/ivi3.png"
-  ]
- 
+  ],
+    categories: ["MR", "Networking"]
   },
 
   {
@@ -98,7 +98,8 @@ export const projects = [
       "/foodar1.png",
       "/foodar2.png",
       "/foodar3.png"
-  ]
+  ],
+    categories: ["AR", "Collaboration", "Mobile"]
   },
   {
     id: 3,
@@ -112,7 +113,9 @@ export const projects = [
       "/furniture1.png",
       "/furniture2.png",
       "/furniture3.png"
-  ]
+  ],
+    categories: ["VR"]
+  
   },
   {
     id: 4,
@@ -126,7 +129,8 @@ export const projects = [
       "/sentis1.png",
       "/sentis2.png",
       "/sentis3.png"
-  ]
+  ],
+    categories: ["MR", "AI"]
   },
 
   {
@@ -141,7 +145,8 @@ export const projects = [
       "/car1.png",
       "/car2.png",
       "/car3.png"
-  ]
+  ],
+    categories: ["VR", "Collaboration"]
   },
 
   {
@@ -151,6 +156,7 @@ export const projects = [
     img: "/shipAR.png",
     stacks: ["Unity", "AR Foundation 5.1", "ARKit", "XCode", "Figma"],
     link: "https://github.com/usama-469/Ship-AR-Museum",
+    categories: ["AR", "Mobile"],
   },
     {
     id: 7,
@@ -164,7 +170,8 @@ export const projects = [
       "/zombie1.png",
       "/zombie2.png",
       "/zombie3.png"
-  ]
+  ],
+    categories: ["Game", "Networking"]
   },
 
     {
@@ -179,7 +186,8 @@ export const projects = [
       "/fcontrol1.png",
       "/fcontrol2.png",
       "/fcontrol3.png"
-    ]
+    ],
+    categories: ["VR", "Collaboration"]
   },
     {
     id: 9,
@@ -194,6 +202,7 @@ export const projects = [
   //     "/VR-room.png",
   //     "/vr-crowd.png"
   // ]
+      categories: ["AR", "Web"],
   },
   {
     id: 10,
@@ -207,7 +216,8 @@ export const projects = [
       "/water-vr1.png",
       "/water-vr2.png",
       "/water-vr3.png"
-    ]
+    ],
+    categories: ["VR", "Collaboration"]
   },
     {
     id: 11,
@@ -221,7 +231,8 @@ export const projects = [
       "/water-pc1.png",
       "/water-pc2.png",
       "/water-pc3.png"
-    ]
+    ],
+    categories: ["Game", "Collaboration"]
   },
   
 ];

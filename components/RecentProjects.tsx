@@ -16,6 +16,7 @@ type Project = {
   link: string;
   gallery?: string[]; // array of image URLs
   videoUrl?: string; // YouTube video URL
+  categories?: string[]; // <-- Add this field for category filter
 };
 
 const PROJECTS_PER_PAGE = 6;
@@ -64,7 +65,33 @@ const RecentProjects = () => {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [handlePrev, handleNext]);
 
-  const visibleProjects = projects.slice(startIndex, startIndex + PROJECTS_PER_PAGE);
+  // Add category filter state
+  const [selectedCategory, setSelectedCategory] = useState<string>("All");
+
+  // Get all unique categories
+  const allCategories = [
+    "All",
+    ...Array.from(
+      new Set(
+        projects.flatMap((project: any) => project.categories || [])
+      )
+    ),
+  ];
+
+  // Filter projects by category
+  const filteredProjects =
+    selectedCategory === "All"
+      ? projects
+      : projects.filter((project: any) =>
+          project.categories?.includes(selectedCategory)
+        );
+
+  // Reset startIndex if filter changes
+  useEffect(() => {
+    setStartIndex(0);
+  }, [selectedCategory]);
+
+  const visibleProjects = filteredProjects.slice(startIndex, startIndex + PROJECTS_PER_PAGE);
 
   return (
     <div className="py-20">
@@ -72,6 +99,23 @@ const RecentProjects = () => {
         A small selection of {' '}
         <span className="text-purple">recent projects</span>
       </h1>
+      {/* Category Filter Bar */}
+      <div className="flex flex-wrap gap-3 justify-center mb-10 mt-8">
+        {allCategories.map((cat) => (
+          <button
+            key={cat}
+            onClick={() => setSelectedCategory(cat)}
+            className={`px-5 py-2 rounded-full border font-semibold transition-all duration-300 ease-in-out transform focus:outline-none focus:ring-2 focus:ring-purple-400 shadow-sm
+              ${selectedCategory === cat
+                ? "bg-gradient-to-br from-purple-500 to-indigo-500 text-white border-transparent scale-110 shadow-lg"
+                : "bg-white dark:bg-[#18181b] text-neutral-700 dark:text-neutral-200 border-gray-300 hover:bg-purple-100 dark:hover:bg-[#232336] hover:scale-105"}
+            `}
+            style={{ boxShadow: selectedCategory === cat ? '0 4px 24px 0 rgba(139,92,246,0.15)' : undefined }}
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
       <div className="flex justify-between items-center mb-4 px-4">
         <button
           onClick={handlePrev}
@@ -122,7 +166,7 @@ const RecentProjects = () => {
                           className="h-60 w-full object-cover rounded-xl group-hover/card:shadow-xl"
                           alt={project.title}
                         />
-                    </div>
+                  </div>
                 </CardItem>
                 <CardItem className="flex-grow">
                   <p>Tech Stack:</p>
