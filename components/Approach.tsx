@@ -97,8 +97,9 @@ const Card = ({
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       // change h-[30rem] to h-[35rem], add rounded-3xl
+      // min-h on mobile so the card has room for the always-visible content below
       className="border border-black/[0.2] group/canvas-card flex items-center justify-center
-       dark:border-white/[0.2]  max-w-sm w-full mx-auto p-4 relative lg:h-[35rem] rounded-3xl "
+       dark:border-white/[0.2]  max-w-sm w-full mx-auto p-4 relative min-h-[20rem] lg:h-[35rem] rounded-3xl "
       style={{
         //   add these two
         //   you can generate the color from here https://cssgradient.io/
@@ -125,28 +126,29 @@ const Card = ({
         )}
       </AnimatePresence>
 
-      <div className="relative z-20 px-10">
+      <div className="relative z-20 px-6 lg:px-10 w-full flex flex-col items-center">
+        {/* Touch devices can't hover, so on mobile the icon sits in normal flow as
+            a header and the title/desc are shown by default. From lg up we restore
+            the original centered icon + hover-to-reveal behaviour. */}
         <div
-          // add this for making it center
-          // absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]
-          className="text-center group-hover/canvas-card:-translate-y-4 absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] 
-        group-hover/canvas-card:opacity-0 transition duration-200 min-w-40 mx-auto flex items-center justify-center"
+          className="text-center flex items-center justify-center min-w-40 mx-auto transition duration-200
+        lg:absolute lg:top-[50%] lg:left-[50%] lg:translate-x-[-50%] lg:translate-y-[-50%]
+        lg:group-hover/canvas-card:-translate-y-4 lg:group-hover/canvas-card:opacity-0"
         >
           {icon}
         </div>
         <h3
-          // change text-3xl, add text-center
-          className="dark:text-white text-center text-3xl opacity-0 group-hover/canvas-card:opacity-100
-         relative z-10 text-black mt-4  font-bold group-hover/canvas-card:text-white
-         group-hover/canvas-card:-translate-y-2 transition duration-200"
+          className="dark:text-white text-center text-2xl lg:text-3xl font-bold text-black mt-5 lg:mt-4 relative z-10
+         transition duration-200 opacity-100 lg:opacity-0
+         lg:group-hover/canvas-card:opacity-100 lg:group-hover/canvas-card:text-white lg:group-hover/canvas-card:-translate-y-2"
         >
           {title}
         </h3>
         {/* add this one for the description */}
         <p
-          className="text-sm opacity-0 group-hover/canvas-card:opacity-100
-         relative z-10 mt-4 group-hover/canvas-card:text-white text-center
-         group-hover/canvas-card:-translate-y-2 transition duration-200"
+          className="text-sm text-center mt-3 lg:mt-4 max-w-xs relative z-10
+         transition duration-200 opacity-100 lg:opacity-0
+         lg:group-hover/canvas-card:opacity-100 lg:group-hover/canvas-card:text-white lg:group-hover/canvas-card:-translate-y-2"
           style={{ color: "#E4ECFF" }}
         >
           {des}

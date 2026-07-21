@@ -146,13 +146,15 @@ export const BentoGridItem = ({
 
           {/* Tech stack list div */}
           {id === 1 && (
-            <div className="flex gap-1 lg:gap-3 w-fit absolute top-1/2 transform -translate-y-1/2 right-0">
-              {/* tech stack lists */}
+            <div className="flex gap-1 lg:gap-3 w-fit absolute top-1/2 transform -translate-y-1/2 right-3 lg:right-0">
+              {/* tech stack lists — smaller and more faded on mobile so they read
+                  as background texture behind the heading instead of crowding it;
+                  full-size, fully opaque, and readable from lg up */}
               <div className="flex flex-col gap-2 md:gap-2 lg:gap-2">
                 {leftLists.map((item, i) => (
                   <span
                     key={i}
-                    className="lg:py-4 lg:px-3 py-2 px-3 text-xs lg:text-base opacity-50 
+                    className="lg:py-4 lg:px-3 py-1.5 px-2.5 text-[10px] lg:text-base opacity-40
                     lg:opacity-100 rounded-lg text-center bg-[#10132E]"
                   >
                     {item}
@@ -165,7 +167,7 @@ export const BentoGridItem = ({
                 {rightLists.map((item, i) => (
                   <span
                     key={i}
-                    className="lg:py-4 lg:px-3 py-2 px-3 text-xs lg:text-base opacity-50 
+                    className="lg:py-4 lg:px-3 py-1.5 px-2.5 text-[10px] lg:text-base opacity-40
                     lg:opacity-100 rounded-lg text-center bg-[#10132E]"
                   >
                     {item}
