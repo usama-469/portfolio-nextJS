@@ -1,22 +1,28 @@
 "use client";
-import React from "react";
+import React, { useMemo } from "react";
 
 import { workExperience } from "@/data";
 import { Button } from "./ui/MovingBorders";
 
 const Experience = () => {
+  // Rolled once, not on every render — this used to re-roll mid-animation.
+  const durations = useMemo(
+    () => workExperience.map(() => Math.floor(Math.random() * 10000) + 10000),
+    []
+  );
+
   return (
     <div className="py-20 w-full">
-      <h1 className="heading">
+      <h2 className="heading">
         My <span className="text-purple">work experience</span>
-      </h1>
+      </h2>
 
       <div className="w-full mt-12 grid lg:grid-cols-4 grid-cols-1 gap-10">
-        {workExperience.map((card) => (
+        {workExperience.map((card, idx) => (
           <Button
             key={card.id}
             //   random duration will be fun , I think , may be not
-            duration={Math.floor(Math.random() * 10000) + 10000}
+            duration={durations[idx]}
             borderRadius="1.75rem"
             style={{
               //   add these two
@@ -33,13 +39,13 @@ const Experience = () => {
             <div className="flex lg:flex-row flex-col lg:items-center p-3 py-6 md:p-5 lg:p-10 gap-2">
               <img
                 src={card.thumbnail}
-                alt={card.thumbnail}
+                alt=""
                 className="lg:w-32 md:w-20 w-16"
               />
               <div className="lg:ms-5">
-                <h1 className="text-start text-xl md:text-2xl font-bold">
+                <h3 className="text-start text-xl md:text-2xl font-bold">
                   {card.title}
-                </h1>
+                </h3>
                 <p className="text-start text-white-100 mt-3 font-semibold">
                   {card.desc}
                 </p>

@@ -23,12 +23,17 @@ export const InfiniteMovingCards = ({
   const containerRef = React.useRef<HTMLDivElement>(null);
   const scrollerRef = React.useRef<HTMLUListElement>(null);
 
+  // StrictMode runs effects twice in dev; without this guard the second pass
+  // cloned the clones and the marquee rendered 3x the cards.
+  const hasCloned = React.useRef(false);
+
   useEffect(() => {
     addAnimation();
   }, []);
   const [start, setStart] = useState(false);
   function addAnimation() {
-    if (containerRef.current && scrollerRef.current) {
+    if (containerRef.current && scrollerRef.current && !hasCloned.current) {
+      hasCloned.current = true;
       const scrollerContent = Array.from(scrollerRef.current.children);
 
       scrollerContent.forEach((item) => {

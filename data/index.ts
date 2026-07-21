@@ -13,7 +13,7 @@ export const gridItems = [
     className: "lg:col-span-3 md:col-span-6 md:row-span-4 lg:min-h-[60vh]",
     imgClassName: "w-full h-full",
     titleClassName: "justify-end",
-    img: "usama.png",
+    img: "/usama.png",
     spareImg: "",
   },
   {
@@ -339,18 +339,21 @@ export const workExperience = [
 export const socialMedia = [
   {
     id: 1,
+    name: "GitHub",
     img: "/git.svg",
     url: "https://github.com/usama-469/", // add profile link
   },
   {
     id: 2,
+    name: "Instagram",
     img: "/insta.svg",
     url: "https://www.instagram.com/usamastark/", // add profile link
   },
   {
     id: 3,
+    name: "LinkedIn",
     img: "/link.svg",
     url: "https://www.linkedin.com/in/muhammad-usama-irfan-2ba81a216/", // add profile link
-  }, 
+  },
   
 ];

@@ -6,9 +6,11 @@ import { cn } from "@/utils/cn";
 export const TextGenerateEffect = ({
   words,
   className,
+  as: Component = "div",
 }: {
   words: string;
   className?: string;
+  as?: React.ElementType;
 }) => {
   const [scope, animate] = useAnimate();
   let wordsArray = words.split(" ");
@@ -27,7 +29,9 @@ export const TextGenerateEffect = ({
 
   const renderWords = () => {
     return (
-      <motion.div ref={scope}>
+      // span, not div: a div inside an h1 is invalid HTML, and this now renders
+      // inside whatever `as` element the caller asks for.
+      <motion.span ref={scope} className="block">
         {wordsArray.map((word, idx) => {
           return (
             <motion.span
@@ -38,17 +42,17 @@ export const TextGenerateEffect = ({
             </motion.span>
           );
         })}
-      </motion.div>
+      </motion.span>
     );
   };
 
   return (
-    <div className={cn("font-bold", className)}>
-      <div className="my-4">
-        <div className=" dark:text-white text-black leading-snug tracking-wide">
+    <Component className={cn("font-bold", className)}>
+      <span className="block my-4">
+        <span className="block dark:text-white text-black leading-snug tracking-wide">
           {renderWords()}
-        </div>
-      </div>
-    </div>
+        </span>
+      </span>
+    </Component>
   );
 };

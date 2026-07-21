@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { FaLocationArrow, FaChevronLeft, FaChevronRight } from "react-icons/fa6";
@@ -21,21 +21,78 @@ type Project = {
 
 const PROJECTS_PER_PAGE = 6;
 
+// Handles watch?v=, youtu.be/ short links, and /embed/ URLs, and tolerates
+// trailing params (&t=30s, the ?si= the Share button appends). Returns null on
+// anything unrecognised so the caller can skip the iframe rather than render a
+// broken one.
+const getYouTubeId = (url: string): string | null => {
+  try {
+    const parsed = new URL(url);
+    const host = parsed.hostname.replace(/^www\./, "");
+
+    if (host === "youtu.be") {
+      return parsed.pathname.slice(1).split("/")[0] || null;
+    }
+    if (host === "youtube.com" || host === "m.youtube.com" || host === "youtube-nocookie.com") {
+      const v = parsed.searchParams.get("v");
+      if (v) return v;
+
+      const embedMatch = parsed.pathname.match(/^\/(?:embed|v|shorts)\/([^/?]+)/);
+      if (embedMatch) return embedMatch[1];
+    }
+    return null;
+  } catch {
+    return null;
+  }
+};
+
 const RecentProjects = () => {
   const [startIndex, setStartIndex] = useState(0);
-  const totalProjects = projects.length;
+  const [selectedCategory, setSelectedCategory] = useState<string>("All");
 
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const lastFocusedRef = useRef<HTMLElement | null>(null);
+
   const openModal = (project: Project) => {
+    lastFocusedRef.current = document.activeElement as HTMLElement | null;
     setSelectedProject(project);
     setIsModalOpen(true);
   };
-  const closeModal = () => {
+  const closeModal = useCallback(() => {
     setIsModalOpen(false);
     setSelectedProject(null);
-  };
+  }, []);
+
+  // Get all unique categories
+  const allCategories = useMemo(
+    () => [
+      "All",
+      ...Array.from(
+        new Set(projects.flatMap((project: any) => project.categories || []))
+      ),
+    ],
+    []
+  );
+
+  // Filter projects by category
+  const filteredProjects = useMemo(
+    () =>
+      selectedCategory === "All"
+        ? projects
+        : projects.filter((project: any) =>
+            project.categories?.includes(selectedCategory)
+          ),
+    [selectedCategory]
+  );
+
+  // Paging is bounded by the *filtered* list, not the full one — every category
+  // holds fewer than one page, so bounding on projects.length left Next enabled
+  // and paged the grid into an empty slice.
+  const canPrev = startIndex > 0;
+  const canNext = startIndex + PROJECTS_PER_PAGE < filteredProjects.length;
 
   const handlePrev = useCallback(() => {
     setStartIndex((prev) => Math.max(prev - PROJECTS_PER_PAGE, 0));
@@ -44,67 +101,101 @@ const RecentProjects = () => {
   const handleNext = useCallback(() => {
     setStartIndex((prev) => {
       const nextIndex = prev + PROJECTS_PER_PAGE;
-      if (nextIndex >= totalProjects) return prev;
+      if (nextIndex >= filteredProjects.length) return prev;
       return nextIndex;
     });
-  }, [totalProjects]);
+  }, [filteredProjects.length]);
 
-  // Keyboard navigation
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "ArrowLeft") {
-        e.preventDefault();
-        handlePrev();
-      }
-      if (e.key === "ArrowRight") {
-        e.preventDefault();
-        handleNext();
-      }
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [handlePrev, handleNext]);
-
-  // Add category filter state
-  const [selectedCategory, setSelectedCategory] = useState<string>("All");
-
-  // Get all unique categories
-  const allCategories = [
-    "All",
-    ...Array.from(
-      new Set(
-        projects.flatMap((project: any) => project.categories || [])
-      )
-    ),
-  ];
-
-  // Filter projects by category
-  const filteredProjects =
-    selectedCategory === "All"
-      ? projects
-      : projects.filter((project: any) =>
-          project.categories?.includes(selectedCategory)
-        );
-
-  // Reset startIndex if filter changes
-  useEffect(() => {
+  const handleCategoryChange = (cat: string) => {
+    setSelectedCategory(cat);
     setStartIndex(0);
-  }, [selectedCategory]);
+  };
+
+  // Arrow keys page the carousel only while it holds focus, so ordinary
+  // keyboard scrolling still works everywhere else on the page.
+  const handleCarouselKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === "ArrowLeft" && canPrev) {
+      e.preventDefault();
+      handlePrev();
+    }
+    if (e.key === "ArrowRight" && canNext) {
+      e.preventDefault();
+      handleNext();
+    }
+  };
 
   const visibleProjects = filteredProjects.slice(startIndex, startIndex + PROJECTS_PER_PAGE);
 
+  // Lock background scroll while the dialog is open, restoring whatever the
+  // previous overflow value was rather than assuming it was "".
+  useEffect(() => {
+    if (!isModalOpen) return;
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previous;
+    };
+  }, [isModalOpen]);
+
+  // Move focus into the dialog on open, return it to the opener on close.
+  useEffect(() => {
+    if (!isModalOpen) {
+      lastFocusedRef.current?.focus();
+      return;
+    }
+    dialogRef.current?.focus();
+  }, [isModalOpen]);
+
+  // Escape closes; Tab cycles within the dialog instead of escaping to the page.
+  useEffect(() => {
+    if (!isModalOpen) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        closeModal();
+        return;
+      }
+      if (e.key !== "Tab") return;
+
+      const focusable = dialogRef.current?.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])'
+      );
+      if (!focusable || focusable.length === 0) return;
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      const active = document.activeElement;
+
+      if (e.shiftKey && (active === first || active === dialogRef.current)) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && active === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [isModalOpen, closeModal]);
+
+  const videoId = selectedProject?.videoUrl
+    ? getYouTubeId(selectedProject.videoUrl)
+    : null;
+
   return (
     <div className="py-20">
-      <h1 className="heading">
+      <h2 className="heading">
         A small selection of {' '}
         <span className="text-purple">recent projects</span>
-      </h1>
+      </h2>
       {/* Category Filter Bar */}
       <div className="flex flex-wrap gap-3 justify-center mb-10 mt-8">
         {allCategories.map((cat) => (
           <button
             key={cat}
-            onClick={() => setSelectedCategory(cat)}
+            onClick={() => handleCategoryChange(cat)}
             className={`px-5 py-2 rounded-full border font-semibold transition-all duration-300 ease-in-out transform focus:outline-none focus:ring-2 focus:ring-purple-400 shadow-sm
               ${selectedCategory === cat
                 ? "bg-gradient-to-br from-purple-500 to-indigo-500 text-white border-transparent scale-110 shadow-lg"
@@ -116,10 +207,17 @@ const RecentProjects = () => {
           </button>
         ))}
       </div>
+      <div
+        role="group"
+        aria-label="Project carousel"
+        tabIndex={0}
+        onKeyDown={handleCarouselKeyDown}
+        className="rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-400"
+      >
       <div className="flex justify-between items-center mb-4 px-4">
         <button
           onClick={handlePrev}
-          disabled={startIndex === 0}
+          disabled={!canPrev}
           className="p-2 rounded-full bg-gradient-to-br from-purple-500 to-indigo-500 text-white shadow-lg hover:scale-110 transition-transform disabled:opacity-40 disabled:cursor-not-allowed"
           aria-label="Previous projects"
         >
@@ -127,7 +225,7 @@ const RecentProjects = () => {
         </button>
         <button
           onClick={handleNext}
-          disabled={startIndex + PROJECTS_PER_PAGE >= totalProjects}
+          disabled={!canNext}
           className="p-2 rounded-full bg-gradient-to-br from-purple-500 to-indigo-500 text-white shadow-lg hover:scale-110 transition-transform disabled:opacity-40 disabled:cursor-not-allowed"
           aria-label="Next projects"
         >
@@ -185,28 +283,36 @@ const RecentProjects = () => {
                   translateZ={20}
                   as={Link}
                   href={project.link}
-                  target="__blank"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e: React.MouseEvent) => e.stopPropagation()}
                   className="px-4 py-2 rounded-xl text-xs font-normal dark:text-white mt-4 ml-auto flex justify-end"
                 >
                   Try now →
                 </CardItem>
               </CardBody>
             </CardContainer>
-          </div> 
+          </div>
         ))}
+      </div>
       </div>
 
       {/* Modal Popup */}
       {isModalOpen && selectedProject && (
         <>
-          {/* Prevent background scroll and hide nav bar by setting body overflow */}
-          <style>{`body { overflow: hidden !important; }`}</style>
+          {/* z-[6000] clears the floating nav's z-[5000]; the nav is fixed, so a
+              body overflow lock alone would not have kept it off the backdrop. */}
           <div
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm"
+            className="fixed inset-0 z-[6000] flex items-center justify-center bg-black/80 backdrop-blur-sm"
             onClick={closeModal}
           >
             <div
-              className="bg-white dark:bg-[#18181b] rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-8 relative animate-fadeIn"
+              ref={dialogRef}
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="project-modal-title"
+              tabIndex={-1}
+              className="bg-white dark:bg-[#18181b] rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-8 relative animate-fadeIn focus:outline-none"
               onClick={e => e.stopPropagation()} // Prevent modal content click from closing
             >
               <button
@@ -218,10 +324,10 @@ const RecentProjects = () => {
               </button>
               <div className="flex flex-col items-center">
                 {/* YouTube Video section if available */}
-                {selectedProject.videoUrl && (
+                {videoId && (
                   <div className="w-full mb-4 aspect-video rounded-xl overflow-hidden bg-black">
                     <iframe
-                      src={`https://www.youtube.com/embed/${selectedProject.videoUrl.split('v=')[1]}`}
+                      src={`https://www.youtube.com/embed/${videoId}`}
                       title={selectedProject.title}
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                       allowFullScreen
@@ -244,7 +350,7 @@ const RecentProjects = () => {
                     ))}
                   </div>
                 )}
-                <h2 className="text-2xl font-bold mb-2 text-purple-600 dark:text-purple-400">{selectedProject.title}</h2>
+                <h3 id="project-modal-title" className="text-2xl font-bold mb-2 text-purple-600 dark:text-purple-400">{selectedProject.title}</h3>
                 <p className="text-neutral-700 dark:text-neutral-200 mb-4 text-center">{selectedProject.des}</p>
                 <div className="flex flex-wrap gap-2 mb-4 justify-center">
                   {selectedProject.stacks.map((item: string, i: number) => (

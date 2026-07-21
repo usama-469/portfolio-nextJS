@@ -1,10 +1,13 @@
 'use client';
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import dynamic from "next/dynamic";
 import { IoDownloadOutline } from "react-icons/io5";
-import { IoCopyOutline } from "react-icons/io5";
 
-import Lottie from "react-lottie";
+// react-lottie pulls in lottie-web, which touches `document` at module scope.
+// Under `output: 'export'` every page is prerendered in Node, so it has to load
+// behind an ssr: false boundary or the build crashes.
+const Lottie = dynamic(() => import("react-lottie"), { ssr: false });
 
 import { cn } from "@/utils/cn";
 
@@ -55,23 +58,23 @@ export const BentoGridItem = ({
   const leftLists = ["AR Foundation", "ARCore & AR Kit", "Vuforia", "8th Wall", "SparkAR", "Meta", "React Native"];
   const rightLists = [ "MetaSDK", "OpenXR", "OVR SDK", "Polyspatial Creator", "Unity", "Unreal Engine"];
 
-  const [copied, setCopied] = useState(false);
+  const [downloaded, setDownloaded] = useState(false);
+  const resetTimer = useRef<ReturnType<typeof setTimeout>>();
 
-  //  const handleCopy = () => {
-  //   const text = "usamairfan2013@gmail.com";
-  //   navigator.clipboard.writeText(text);
-  //   setCopied(true);
-  // };
+  useEffect(() => () => clearTimeout(resetTimer.current), []);
 
   const handleDownload = () => {
-    const fileUrl = "Usama-XR-resume.pdf";  
+    const fileUrl = "/Usama-XR-resume.pdf";
     const link = document.createElement("a");
     link.href = fileUrl;
     link.download = "Usama-XR-resume.pdf";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    setCopied(true);
+
+    setDownloaded(true);
+    clearTimeout(resetTimer.current);
+    resetTimer.current = setTimeout(() => setDownloaded(false), 3000);
   };
 
   return (
@@ -95,7 +98,7 @@ export const BentoGridItem = ({
           {img && (
             <img
               src={img}
-              alt={img}
+              alt=""
               className={cn(imgClassName, "object-cover object-center ")}
             />
           )}
@@ -107,7 +110,7 @@ export const BentoGridItem = ({
           {spareImg && (
             <img
               src={spareImg}
-              alt={spareImg}
+              alt=""
               //   width={220}
               className="object-cover object-center w-full h-full"
             />
@@ -174,23 +177,29 @@ export const BentoGridItem = ({
           {id === 6 && (
             <div className="mt-5 relative">
              
-              <div
-                className={`absolute -bottom-5 right-0 ${copied ? "block" : "block"
-                  }`}
-              >
-                {/* <img src="/confetti.gif" alt="confetti" /> */}
-                <Lottie options={{
-                  loop: copied,
-                  autoplay: copied,
-                  animationData, 
-                  rendererSettings: {
-                    preserveAspectRatio: 'xMidYMid slice',
-                  }
-                }}  />
-              </div>
+              {downloaded && (
+                <div className="absolute -bottom-5 right-0">
+                  {/* eventListeners is passed explicitly: react-lottie's
+                      deRegisterEvents does an unguarded .forEach on it during
+                      componentWillUnmount, and its defaultProps do not survive
+                      the next/dynamic wrapper — so unmounting the confetti
+                      threw "Cannot read properties of undefined". */}
+                  <Lottie
+                    eventListeners={[]}
+                    options={{
+                      loop: false,
+                      autoplay: true,
+                      animationData,
+                      rendererSettings: {
+                        preserveAspectRatio: 'xMidYMid slice',
+                      }
+                    }}
+                  />
+                </div>
+              )}
 
               <MagicButton
-                title={copied ? "Resume downloaded!" : "Download my Resume"}
+                title={downloaded ? "Resume downloaded!" : "Download my Resume"}
                 icon={<IoDownloadOutline />}
                 position="left"
                 handleClick={handleDownload}
